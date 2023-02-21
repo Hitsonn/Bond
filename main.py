@@ -22,7 +22,7 @@ class MyWidget(QMainWindow):
         self.tableWidget_1.setColumnCount(10)
         self.tableWidget_1.setRowCount(0)
         self.tableWidget_1.setHorizontalHeaderLabels(
-            ['id', 'тип', 'имя', 'кабинет', 'работник', 'инв_№', 'ip', 'гарантия', 'датобслуживания',
+            ['id', 'тип', 'имя', 'кабинет', 'работник', 'инв_№', 'ip', 'гарантия', 'дата бслуживания',
              'след обслуживание'])
         for i, row in enumerate(result):
             self.tableWidget_1.setRowCount(
@@ -33,8 +33,10 @@ class MyWidget(QMainWindow):
         self.tableWidget_1.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
 
     def item_changed(self, item):
-        pass
-        # self.modified[self.titles[item.column()]] = item.text()
+        print(item.column())
+        print(item.text())
+        print(item.row())
+        # self.tableWidget_1.modified[self.titles[item.column()]] = item.text()
 
 
 def except_hook(cls, exception, traceback):
