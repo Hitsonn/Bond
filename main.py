@@ -1,19 +1,22 @@
 import sys
 
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QWidget
 import sqlite3
+from General import Gen_window
+from forms.add_computer import *
 
 
 # from Ui import Ui_MainWindow
 
 
-class MyWidget(QMainWindow):
+class MyWidget(QMainWindow, Gen_window):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Ui.ui', self)
+        self.setupUi(self)
         self.update_table_computers()
         self.tableWidget_1.itemChanged.connect(self.item_changed)
+        self.add_comp.clicked.connect(self.show_add_form)
 
     def update_table_computers(self):
         con = sqlite3.connect("db/computers.sqlite3")
@@ -31,12 +34,19 @@ class MyWidget(QMainWindow):
                 self.tableWidget_1.setItem(
                     i, j, QTableWidgetItem(str(elem)))
         self.tableWidget_1.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        con.close()
 
     def item_changed(self, item):
         print(item.column())
         print(item.text())
         print(item.row())
         # self.tableWidget_1.modified[self.titles[item.column()]] = item.text()
+
+    def show_add_form(self):
+        self.ex1 = AddComp()
+        self.ex1.show()
+
+
 
 
 def except_hook(cls, exception, traceback):
