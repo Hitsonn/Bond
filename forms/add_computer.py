@@ -29,6 +29,7 @@ class AddComp(QMainWindow, AddWindow):
                     " VALUES (?,?,?,?,?,?,?,?,?)", (typ, name, location, worker, inventory, ip, warranty, service, nex))
         conn.commit()
         conn.close()
+        # Нужно организовать обновление таблица в главном окне
 
 
     def exit(self):

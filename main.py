@@ -1,10 +1,11 @@
 import sys
 
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QWidget, QMessageBox
 import sqlite3
 from General import Gen_window
 from forms.add_computer import *
+from forms.edt_computer import *
 
 
 # from Ui import Ui_MainWindow
@@ -17,6 +18,8 @@ class MyWidget(QMainWindow, Gen_window):
         self.update_table_computers()
         self.tableWidget_1.itemChanged.connect(self.item_changed)
         self.add_comp.clicked.connect(self.show_add_form)
+        self.del_comp.clicked.connect(self.delete_row)
+        self.edt_comp.clicked.connect(self.edit_row)
 
     def update_table_computers(self):
         con = sqlite3.connect("db/computers.sqlite3")
@@ -46,7 +49,51 @@ class MyWidget(QMainWindow, Gen_window):
         self.ex1 = AddComp()
         self.ex1.show()
 
+    def show_edit_dialog(self, row):
+        self.ex2 = EdtComp(row)
+        self.ex2.show()
 
+    def delete_row(self, db_path):
+        # Получаем индекс выбранной строки
+        selected_row = self.tableWidget_1.currentRow()
+        if selected_row == -1:
+            # Если ни одна строка не выбрана, выводим сообщение и выходим из функции
+            QMessageBox.warning(None, "Ошибка", "Вы не выбрали строку")
+            return
+
+        # Получаем ID записи, которую нужно удалить
+        id_ = self.tableWidget_1.item(selected_row, 0).text()
+
+        # Удаляем запись из базы данных
+        conn = sqlite3.connect("db/computers.sqlite3")
+        cur = conn.cursor()
+        cur.execute("DELETE FROM computers WHERE id=?", (id_,))
+        conn.commit()
+        conn.close()
+
+        # Удаляем выбранную строку из таблицы
+        self.tableWidget_1.removeRow(selected_row)
+
+    def edit_row(self):
+        # Получаем индекс выбранной строки
+        selected_row = self.tableWidget_1.currentRow()
+        if selected_row == -1:
+            # Если ни одна строка не выбрана, выводим сообщение и выходим из функции
+            QMessageBox.warning(None, "Ошибка", "Вы не выбрали строку")
+            return
+
+        # Получаем ID записи, которую нужно изменить
+        id_ = self.tableWidget_1.item(selected_row, 0).text()
+
+        # Открываем соединение с базой данных
+        conn = sqlite3.connect("db/computers.sqlite3")
+        cur = conn.cursor()
+
+        # Получаем текущие значения полей записи из базы данных
+        cur.execute("SELECT * FROM computers WHERE id=?", (id_,))
+        row = cur.fetchone()
+        # Открываем диалог редактирования записи
+        self.show_edit_dialog(row)
 
 
 def except_hook(cls, exception, traceback):
