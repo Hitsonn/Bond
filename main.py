@@ -1,6 +1,7 @@
 import sys
 
 from PyQt5 import uic, QtWidgets
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QWidget, QMessageBox
 import sqlite3
 from General import Gen_window
@@ -16,10 +17,12 @@ class MyWidget(QMainWindow, Gen_window):
         super().__init__()
         self.setupUi(self)
         self.update_table_computers()
-        self.tableWidget_1.itemChanged.connect(self.item_changed)
+        # self.tableWidget_1.itemChanged.connect(self.item_changed)
         self.add_comp.clicked.connect(self.show_add_form)
         self.del_comp.clicked.connect(self.delete_row)
         self.edt_comp.clicked.connect(self.edit_row)
+        self.up_comp.clicked.connect(self.update_table_computers)
+        self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
 
     def update_table_computers(self):
         con = sqlite3.connect("db/computers.sqlite3")
@@ -37,13 +40,43 @@ class MyWidget(QMainWindow, Gen_window):
                 self.tableWidget_1.setItem(
                     i, j, QTableWidgetItem(str(elem)))
         self.tableWidget_1.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        results = cur.execute("SELECT DISTINCT location FROM computers").fetchall()
+        model = QStandardItemModel()
+        for row in results:
+            location = row[0]
+            if location:
+                item = QStandardItem(location)
+                item.setCheckable(True)
+                item.setEditable(False)
+                model.appendRow(item)
+        self.treeView.setModel(model)
+        print('Обновление прошло')
         con.close()
 
-    def item_changed(self, item):
-        print(item.column())
-        print(item.text())
-        print(item.row())
+    # def item_changed(self, item):
+    #     print(item.column())
+        # print(item.text())
+        # print(item.row())
         # self.tableWidget_1.modified[self.titles[item.column()]] = item.text()
+
+    def filter_data(self):
+        print('готово')
+        selected_indexes = self.treeView.selectedIndexes()
+        if selected_indexes:
+            selected_location = selected_indexes[0].data()
+            db = sqlite3.connect('db/computers.sqlite3')
+            cursor = db.cursor()
+            cursor.execute("SELECT * FROM computers WHERE location=?", (selected_location,))
+            results = cursor.fetchall()
+            self.tableWidget_1.setRowCount(len(results))
+            self.tableWidget_1.setColumnCount(len(results[0]))
+            self.tableWidget_1.setHorizontalHeaderLabels([description[0] for description in cursor.description])
+            for i, row in enumerate(results):
+                for j, value in enumerate(row):
+                    item = QTableWidgetItem(str(value))
+                    self.tableWidget_1.setItem(i, j, item)
+            db.close()
+
 
     def show_add_form(self):
         self.ex1 = AddComp()

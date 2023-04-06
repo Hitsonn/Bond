@@ -3,7 +3,6 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from forms.Edt_windows import EdtWindow
 import sqlite3
-from main import *
 
 
 class EdtComp(QMainWindow, EdtWindow):
