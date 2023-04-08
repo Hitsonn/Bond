@@ -21,7 +21,7 @@ class MyWidget(QMainWindow, Gen_window):
         self.add_comp.clicked.connect(self.show_add_form)
         self.del_comp.clicked.connect(self.delete_row)
         self.edt_comp.clicked.connect(self.edit_row)
-        self.up_comp.clicked.connect(self.update_table_computers)
+        # self.up_comp.clicked.connect(self.update_table_computers)
         self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
 
     def update_table_computers(self):
@@ -42,11 +42,14 @@ class MyWidget(QMainWindow, Gen_window):
         self.tableWidget_1.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         results = cur.execute("SELECT DISTINCT location FROM computers").fetchall()
         model = QStandardItemModel()
+        all_item = QStandardItem("все")
+        all_item.setCheckable(False)
+        all_item.setEditable(False)
+        model.appendRow(all_item)
         for row in results:
-            location = row[0]
-            if location:
+            if location := row[0]:
                 item = QStandardItem(location)
-                item.setCheckable(True)
+                item.setCheckable(False)
                 item.setEditable(False)
                 model.appendRow(item)
         self.treeView.setModel(model)
@@ -60,22 +63,27 @@ class MyWidget(QMainWindow, Gen_window):
         # self.tableWidget_1.modified[self.titles[item.column()]] = item.text()
 
     def filter_data(self):
-        print('готово')
-        selected_indexes = self.treeView.selectedIndexes()
-        if selected_indexes:
-            selected_location = selected_indexes[0].data()
-            db = sqlite3.connect('db/computers.sqlite3')
-            cursor = db.cursor()
+        if not (selected_indexes := self.treeView.selectedIndexes()):
+            return
+        selected_location = selected_indexes[0].data()
+        db = sqlite3.connect('db/computers.sqlite3')
+        cursor = db.cursor()
+        if selected_indexes[0].data() == 'все':
+            cursor.execute("SELECT * FROM computers")
+        else:
             cursor.execute("SELECT * FROM computers WHERE location=?", (selected_location,))
-            results = cursor.fetchall()
-            self.tableWidget_1.setRowCount(len(results))
-            self.tableWidget_1.setColumnCount(len(results[0]))
-            self.tableWidget_1.setHorizontalHeaderLabels([description[0] for description in cursor.description])
-            for i, row in enumerate(results):
-                for j, value in enumerate(row):
-                    item = QTableWidgetItem(str(value))
-                    self.tableWidget_1.setItem(i, j, item)
-            db.close()
+        results = cursor.fetchall()
+        self.tableWidget_1.setRowCount(len(results))
+        self.tableWidget_1.setColumnCount(len(results[0]))
+        self.tableWidget_1.setHorizontalHeaderLabels([description[0] for description in cursor.description])
+        self.tableWidget_1.setHorizontalHeaderLabels(
+            ['id', 'тип', 'имя', 'кабинет', 'работник', 'инв_№', 'ip', 'гарантия', 'дата бслуживания',
+             'след обслуживание'])
+        for i, row in enumerate(results):
+            for j, value in enumerate(row):
+                item = QTableWidgetItem(str(value))
+                self.tableWidget_1.setItem(i, j, item)
+        db.close()
 
 
     def show_add_form(self):
