@@ -21,7 +21,7 @@ class MyWidget(QMainWindow, Gen_window):
         self.add_comp.clicked.connect(self.show_add_form)
         self.del_comp.clicked.connect(self.delete_row)
         self.edt_comp.clicked.connect(self.edit_row)
-        # self.up_comp.clicked.connect(self.update_table_computers)
+        self.up_comp.clicked.connect(self.update_table_computers)
         self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
 
     def update_table_computers(self):
@@ -53,7 +53,7 @@ class MyWidget(QMainWindow, Gen_window):
                 item.setEditable(False)
                 model.appendRow(item)
         self.treeView.setModel(model)
-        print('Обновление прошло')
+        self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
         con.close()
 
     # def item_changed(self, item):
@@ -88,10 +88,12 @@ class MyWidget(QMainWindow, Gen_window):
 
     def show_add_form(self):
         self.ex1 = AddComp()
+        self.ex1.closed.connect(self.update_table_computers)
         self.ex1.show()
 
     def show_edit_dialog(self, row):
         self.ex2 = EdtComp(row)
+        self.ex2.closed.connect(self.update_table_computers)
         self.ex2.show()
 
     def delete_row(self, db_path):

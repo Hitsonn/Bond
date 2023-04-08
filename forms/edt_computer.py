@@ -1,11 +1,13 @@
 import sys
-
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from forms.Edt_windows import EdtWindow
 import sqlite3
 
 
 class EdtComp(QMainWindow, EdtWindow):
+    closed = pyqtSignal()
+
     def __init__(self, row):
         super().__init__()
         self.row = row
@@ -48,9 +50,13 @@ class EdtComp(QMainWindow, EdtWindow):
             (edited_row))
         conn.commit()
         conn.close()
+        self.close()
         # Нужно организовать обновление таблица в главном окне
-
 
     def exit(self):
         self.close()
+
+    def closeEvent(self, event):
+        self.closed.emit()
+        super().closeEvent(event)
 
