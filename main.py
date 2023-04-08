@@ -21,8 +21,9 @@ class MyWidget(QMainWindow, Gen_window):
         self.add_comp.clicked.connect(self.show_add_form)
         self.del_comp.clicked.connect(self.delete_row)
         self.edt_comp.clicked.connect(self.edit_row)
-        self.up_comp.clicked.connect(self.update_table_computers)
-        self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
+        self.tableWidget_1.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        # self.up_comp.clicked.connect(self.update_table_computers)
+        # self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
 
     def update_table_computers(self):
         con = sqlite3.connect("db/computers.sqlite3")
