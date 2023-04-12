@@ -1,10 +1,11 @@
 import sys
+import datetime
 
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QWidget, QMessageBox
 import sqlite3
-from General import Gen_window
+from forms.general import Gen_window
 from forms.add_computer import *
 from forms.edt_computer import *
 
@@ -17,11 +18,16 @@ class MyWidget(QMainWindow, Gen_window):
         super().__init__()
         self.setupUi(self)
         self.update_table_computers()
+        self.tableWidget_1.itemSelectionChanged.connect(self.update_textedit)
         # self.tableWidget_1.itemChanged.connect(self.item_changed)
         self.add_comp.clicked.connect(self.show_add_form)
         self.del_comp.clicked.connect(self.delete_row)
         self.edt_comp.clicked.connect(self.edit_row)
         self.tableWidget_1.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.serv1_btn.clicked.connect(lambda: self.update_service(1))
+        self.serv2_btn.clicked.connect(lambda: self.update_service(2))
+        self.serv3_btn.clicked.connect(lambda: self.update_service(3))
+        self.current_computer_id = None
         # self.up_comp.clicked.connect(self.update_table_computers)
         # self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
 
@@ -138,6 +144,41 @@ class MyWidget(QMainWindow, Gen_window):
         row = cur.fetchone()
         # Открываем диалог редактирования записи
         self.show_edit_dialog(row)
+
+    def update_textedit(self):
+        # получаем выделенную строку
+        selected_row = self.tableWidget_1.currentRow()
+
+        # получаем содержимое первой ячейки в этой строке
+        id = self.tableWidget_1.item(selected_row, 0).text()
+        self.current_computer_id = id
+        name = self.tableWidget_1.item(selected_row, 2).text()
+        self.conn = sqlite3.connect('db/computers.sqlite3')
+        cur = self.conn.cursor()
+        result = cur.execute(f"""SELECT * FROM service WHERE id={id}""").fetchall()
+        # Если данные найдены, заполняем текстовое поле
+        if result:
+            self.textEdit.clear()
+            self.textEdit.append(f"Данные для {name}:\n")
+            self.textEdit.append(f'Дата ТО_1: {result[0][1]}')
+            self.textEdit.append(f'Дата ТО_2: {result[0][2]}')
+            self.textEdit.append(f'Дата ТО_3: {result[0][3]}')
+        else:
+            self.textEdit.setText(f"Данные для id={id} не найдены")
+        self.conn.commit()
+        self.conn.close()
+
+    def update_service(self, service_number):
+        service_column = f'service{service_number}'
+        today = datetime.date.today().strftime('%d.%m.%Y')
+
+        con = sqlite3.connect("db/computers.sqlite3")
+        cur = con.cursor()
+        if self.current_computer_id:
+            cur.execute(f"UPDATE service SET {service_column} = ? WHERE id = ?", (today, self.current_computer_id))
+        con.commit()
+        con.close()
+        self.update_textedit()
 
 
 def except_hook(cls, exception, traceback):

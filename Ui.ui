@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1117</width>
-    <height>851</height>
+    <width>564</width>
+    <height>441</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,7 +54,13 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0">
+          <property name="spacing">
+           <number>1</number>
+          </property>
+          <property name="sizeConstraint">
+           <enum>QLayout::SetNoConstraint</enum>
+          </property>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <property name="spacing">
@@ -133,14 +139,32 @@
            <widget class="QTableWidget" name="tableWidget_1"/>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_2">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
+           <widget class="QTextEdit" name="textEdit"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QPushButton" name="serv1_btn">
+              <property name="text">
+               <string>ТО1 выполнено</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="serv2_btn">
+              <property name="text">
+               <string>ТО2 выполнено</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="serv3_btn">
+              <property name="text">
+               <string>ТО3 выполнено</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -226,8 +250,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1117</width>
-     <height>26</height>
+     <width>564</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

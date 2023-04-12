@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Ui.ui'
+# Form implementation generated from reading ui file 'ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Gen_window(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(1117, 851)
+        mainWindow.resize(564, 441)
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -41,6 +41,8 @@ class Gen_window(object):
         self.treeView.setObjectName("treeView")
         self.horizontalLayout.addWidget(self.treeView)
         self.verticalLayout_5 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_5.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)
+        self.verticalLayout_5.setSpacing(1)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setContentsMargins(-1, -1, -1, 0)
@@ -86,12 +88,21 @@ class Gen_window(object):
         self.tableWidget_1.setColumnCount(0)
         self.tableWidget_1.setRowCount(0)
         self.verticalLayout_5.addWidget(self.tableWidget_1)
-        self.tableWidget_2 = QtWidgets.QTableWidget(self.devises)
-        self.tableWidget_2.setMinimumSize(QtCore.QSize(0, 0))
-        self.tableWidget_2.setObjectName("tableWidget_2")
-        self.tableWidget_2.setColumnCount(0)
-        self.tableWidget_2.setRowCount(0)
-        self.verticalLayout_5.addWidget(self.tableWidget_2)
+        self.textEdit = QtWidgets.QTextEdit(self.devises)
+        self.textEdit.setObjectName("textEdit")
+        self.verticalLayout_5.addWidget(self.textEdit)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.serv1_btn = QtWidgets.QPushButton(self.devises)
+        self.serv1_btn.setObjectName("serv1_btn")
+        self.horizontalLayout_4.addWidget(self.serv1_btn)
+        self.serv2_btn = QtWidgets.QPushButton(self.devises)
+        self.serv2_btn.setObjectName("serv2_btn")
+        self.horizontalLayout_4.addWidget(self.serv2_btn)
+        self.serv3_btn = QtWidgets.QPushButton(self.devises)
+        self.serv3_btn.setObjectName("serv3_btn")
+        self.horizontalLayout_4.addWidget(self.serv3_btn)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_4)
         self.horizontalLayout.addLayout(self.verticalLayout_5)
         self.TabWiget.addTab(self.devises, "")
         self.workers = QtWidgets.QWidget()
@@ -152,7 +163,7 @@ class Gen_window(object):
         self.verticalLayout_4.addWidget(self.TabWiget)
         mainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(mainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1117, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 564, 21))
         self.menubar.setObjectName("menubar")
         mainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
@@ -170,6 +181,9 @@ class Gen_window(object):
         self.del_comp.setText(_translate("mainWindow", "удалить"))
         self.edt_comp.setText(_translate("mainWindow", "править"))
         self.up_comp.setText(_translate("mainWindow", "обновить"))
+        self.serv1_btn.setText(_translate("mainWindow", "ТО1 выполнено"))
+        self.serv2_btn.setText(_translate("mainWindow", "ТО2 выполнено"))
+        self.serv3_btn.setText(_translate("mainWindow", "ТО3 выполнено"))
         self.TabWiget.setTabText(self.TabWiget.indexOf(self.devises), _translate("mainWindow", "Устройства"))
         self.TabWiget.setTabText(self.TabWiget.indexOf(self.workers), _translate("mainWindow", "Сотрудники"))
         self.TabWiget.setTabText(self.TabWiget.indexOf(self.repair), _translate("mainWindow", "Обслуживание"))
