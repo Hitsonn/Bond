@@ -8,6 +8,7 @@ import sqlite3
 from forms.general import Gen_window
 from forms.add_computer import *
 from forms.edt_computer import *
+from data.config import service1, service2, service3
 
 
 # from Ui import Ui_MainWindow
@@ -20,15 +21,15 @@ class MyWidget(QMainWindow, Gen_window):
         self.update_table_computers()
         self.tableWidget_1.itemSelectionChanged.connect(self.update_textedit)
         # self.tableWidget_1.itemChanged.connect(self.item_changed)
-        self.add_comp.clicked.connect(self.show_add_form)
-        self.del_comp.clicked.connect(self.delete_row)
-        self.edt_comp.clicked.connect(self.edit_row)
+        self.add_btn.clicked.connect(self.show_add_form)
+        self.del_btn.clicked.connect(self.delete_row)
+        self.edt_btn.clicked.connect(self.edit_row)
         self.tableWidget_1.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.serv1_btn.clicked.connect(lambda: self.update_service(1))
         self.serv2_btn.clicked.connect(lambda: self.update_service(2))
         self.serv3_btn.clicked.connect(lambda: self.update_service(3))
         self.current_computer_id = None
-        # self.up_comp.clicked.connect(self.update_table_computers)
+        self.dubll_btn.clicked.connect(self.add_duplicate)
         # self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
 
     def update_table_computers(self):
@@ -98,6 +99,14 @@ class MyWidget(QMainWindow, Gen_window):
         self.ex1.closed.connect(self.update_table_computers)
         self.ex1.show()
 
+    def add_duplicate(self):
+        if not self.current_computer_id:
+            QMessageBox.warning(None, "Ошибка", "Вы не выбрали строку")
+            return
+        self.ex3 = AddComp(id=self.current_computer_id)
+        self.ex3.closed.connect(self.update_table_computers)
+        self.ex3.show()
+
     def show_edit_dialog(self, row):
         self.ex2 = EdtComp(row)
         self.ex2.closed.connect(self.update_table_computers)
@@ -145,28 +154,47 @@ class MyWidget(QMainWindow, Gen_window):
         # Открываем диалог редактирования записи
         self.show_edit_dialog(row)
 
+    def check_date(self, date_str):
+        date_format = '%d.%m.%Y'
+        today = datetime.datetime.today()
+        date = datetime.datetime.strptime(date_str, date_format)
+        delta = today - date
+        return delta.days
+
     def update_textedit(self):
+        result = None
+        name = None
         # получаем выделенную строку
         selected_row = self.tableWidget_1.currentRow()
-
         # получаем содержимое первой ячейки в этой строке
-        id = self.tableWidget_1.item(selected_row, 0).text()
-        self.current_computer_id = id
-        name = self.tableWidget_1.item(selected_row, 2).text()
-        self.conn = sqlite3.connect('db/computers.sqlite3')
-        cur = self.conn.cursor()
-        result = cur.execute(f"""SELECT * FROM service WHERE id={id}""").fetchall()
+        if self.tableWidget_1.item(selected_row, 0):
+            id = self.tableWidget_1.item(selected_row, 0).text()
+            self.current_computer_id = id
+            name = self.tableWidget_1.item(selected_row, 2).text()
+            self.conn = sqlite3.connect('db/computers.sqlite3')
+            cur = self.conn.cursor()
+            result = cur.execute(f"""SELECT * FROM service WHERE id={id}""").fetchall()
+            self.conn.commit()
+            self.conn.close()
         # Если данные найдены, заполняем текстовое поле
         if result:
             self.textEdit.clear()
             self.textEdit.append(f"Данные для {name}:\n")
-            self.textEdit.append(f'Дата ТО_1: {result[0][1]}')
-            self.textEdit.append(f'Дата ТО_2: {result[0][2]}')
-            self.textEdit.append(f'Дата ТО_3: {result[0][3]}')
+            if self.check_date(result[0][1]) > service1:
+                self.textEdit.append(f'Дата ТО_1: <font color="red">{result[0][1]}</font>')
+            else:
+                self.textEdit.append(f'Дата ТО_1: {result[0][1]}')
+            if self.check_date(result[0][2]) > service2:
+                self.textEdit.append(f'Дата ТО_2: <font color="red">{result[0][2]}</font>')
+            else:
+                self.textEdit.append(f'Дата ТО_2: {result[0][2]}')
+            if self.check_date(result[0][3]) > service3:
+                self.textEdit.append(f'Дата ТО_3: <font color="red">{result[0][3]}</font>')
+            else:
+                self.textEdit.append(f'Дата ТО_3: {result[0][3]}')
         else:
-            self.textEdit.setText(f"Данные для id={id} не найдены")
-        self.conn.commit()
-        self.conn.close()
+            self.textEdit.setText(f"Для отображения выделите объект")
+
 
     def update_service(self, service_number):
         service_column = f'service{service_number}'

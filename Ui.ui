@@ -70,66 +70,30 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QPushButton" name="add_comp">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>30</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>93</width>
-                <height>16777215</height>
-               </size>
-              </property>
+             <widget class="QPushButton" name="add_btn">
               <property name="text">
-               <string>добавить</string>
+               <string>Добавить</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="del_comp">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QPushButton" name="edt_btn">
               <property name="text">
-               <string>удалить</string>
+               <string>Редактировать</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="edt_comp">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QPushButton" name="del_btn">
               <property name="text">
-               <string>править</string>
+               <string>Удалить</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="up_comp">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QPushButton" name="dubll_btn">
               <property name="text">
-               <string>обновить</string>
+               <string>Дублировать</string>
               </property>
              </widget>
             </item>
