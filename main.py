@@ -1,10 +1,13 @@
 import datetime
 import json
+import os
+import shutil
 import sys
 
+import xlsxwriter as xlsxwriter
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtWidgets import QTableWidgetItem, QApplication, QHeaderView
+from PyQt5.QtWidgets import QTableWidgetItem, QApplication, QHeaderView, QInputDialog, QFileDialog
 from forms.ui import Ui_mainWindow
 from windows.add_computer import *
 from windows.edt_computer import *
@@ -49,8 +52,10 @@ class MyWidget(QMainWindow, Ui_mainWindow):
         self.serv1_btn.clicked.connect(lambda: self.update_service(1, self.tableWidget_1, self.textEdit, 'service'))
         self.serv2_btn.clicked.connect(lambda: self.update_service(2, self.tableWidget_1, self.textEdit, 'service'))
         self.serv3_btn.clicked.connect(lambda: self.update_service(3, self.tableWidget_1, self.textEdit, 'service'))
-        self.serv1_btn_2.clicked.connect(lambda: self.update_service(1, self.tableWidget_2, self.textEdit_2, 'service2'))
-        self.serv1_btn_3.clicked.connect(lambda: self.update_service(1, self.tableWidget_3, self.textEdit_3, 'service3'))
+        self.serv1_btn_2.clicked.connect(
+            lambda: self.update_service(1, self.tableWidget_2, self.textEdit_2, 'service2'))
+        self.serv1_btn_3.clicked.connect(
+            lambda: self.update_service(1, self.tableWidget_3, self.textEdit_3, 'service3'))
         self.current_computer_id = None
         self.dubll_btn.clicked.connect(
             lambda: self.add_duplicate('computers', 'service', self.tableWidget_1, self.treeView))
@@ -59,6 +64,7 @@ class MyWidget(QMainWindow, Ui_mainWindow):
         self.dupl_btn_3.clicked.connect(
             lambda: self.add_duplicate('other', 'service3', self.tableWidget_3, self.treeView_3))
         self.action_3.triggered.connect(self.setting)
+        self.action_2.triggered.connect(self.worker_report)
 
     def update_table_computers(self, widget_table, widget_view, table):
         # Обновление таблиц с оборудованием
@@ -252,6 +258,84 @@ class MyWidget(QMainWindow, Ui_mainWindow):
         self.ex4 = SettingWindow()
         self.ex4.closed.connect(self.update_table_computers)
         self.ex4.show()
+
+    def worker_report(self):
+        worker, ok = QInputDialog.getText(self, 'Введите фамилию работника', 'Фамилия:')
+        if not ok:
+            return
+
+        # Открываем соединение с базой данных
+        conn = sqlite3.connect('db/computers.sqlite3')
+        c = conn.cursor()
+
+        # Выбираем данные из всех таблиц по полю worker
+        c.execute(
+            f"SELECT type, name, location, worker, inventory, ip, warranty FROM computers WHERE worker = '{worker}'")
+        computers_data = c.fetchall()
+
+        c.execute(
+            f"SELECT type, name, location, worker, inventory, ip, warranty FROM office_equipment WHERE worker = '{worker}'")
+        office_equipment_data = c.fetchall()
+
+        c.execute(f"SELECT type, name, location, worker, inventory, ip, warranty FROM other WHERE worker = '{worker}'")
+        other_data = c.fetchall()
+
+        # Закрытие соединения с базой данных
+        conn.close()
+
+        # Создаем документ Excel
+        workbook = xlsxwriter.Workbook(f'{worker}.xlsx')
+        worksheet = workbook.add_worksheet()
+
+        # Записываем данные в документ Excel
+        headings = ['Наименование', 'Сетевое имя', 'Расположение', 'Работник', 'Инв.номер', 'ip', 'Гарантия']
+        row = 0
+        col = 0
+        for heading in headings:
+            worksheet.write(row, col, heading)
+            col += 1
+
+        row = 1
+        for data in computers_data:
+            col = 0
+            for value in data:
+                worksheet.write(row, col, value)
+                col += 1
+            row += 1
+
+        for data in office_equipment_data:
+            col = 0
+            for value in data:
+                worksheet.write(row, col, value)
+                col += 1
+            row += 1
+
+        for data in other_data:
+            col = 0
+            for value in data:
+                worksheet.write(row, col, value)
+                col += 1
+            row += 1
+
+        # Настраиваем ширину столбцов
+        for col in range(len(headings)):
+            worksheet.set_column(col, col, 20)
+
+        # Закрываем документ
+        workbook.close()
+
+        # Открываем диалоговое окно для выбора пути сохранения файла
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_name, _ = QFileDialog.getSaveFileName(self, "Сохранить отчет",
+                                                   f"{worker}.xlsx",
+                                                   "Excel Files (*.xlsx)", options=options)
+
+        # Если пользователь выбрал путь, сохраняем файл
+        if file_name:
+            shutil.move(f'{worker}.xlsx', file_name)
+        else:
+            os.remove(f'{worker}.xlsx')
 
 
 def except_hook(cls, exception, traceback):
