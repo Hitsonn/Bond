@@ -7,16 +7,17 @@ from PyQt5.QtCore import pyqtSignal
 class AddComp(QMainWindow, AddWindow):
     closed = pyqtSignal()
 
-    def __init__(self, id=None):
-        super().__init__()
+    def __init__(self, *args, id=None):
+        self.table1, self.table2 = args
         self.id = id
+        super().__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(self.add)
         self.pushButton_2.clicked.connect(self.exit)
         self.conn = sqlite3.connect('db/computers.sqlite3')
         self.cur = self.conn.cursor()
         if self.id:
-            self.cur.execute("SELECT * FROM computers WHERE id=?", (id,))
+            self.cur.execute(f"SELECT * FROM {self.table1} WHERE id=?", (id,))
             result = self.cur.fetchone()
             self.type_edt.setText(result[1])
             self.name_edt.setText(result[2])
@@ -36,11 +37,11 @@ class AddComp(QMainWindow, AddWindow):
         warranty = self.warranty_edt.text()
         if all([typ, name, location, worker, inventory, ip, warranty]):
             self.cur.execute(
-                "INSERT INTO computers (type, name, location, worker, inventory, ip, warranty)"
+                f"INSERT INTO {self.table1} (type, name, location, worker, inventory, ip, warranty)"
                 " VALUES (?,?,?,?,?,?,?)", (typ, name, location, worker, inventory, ip, warranty))
             last_row_id = self.cur.lastrowid
             self.cur.execute(
-                "INSERT INTO service (id, service1, service2, service3) VALUES (?,?,?,?)",
+                f"INSERT INTO {self.table2} (id, service1, service2, service3) VALUES (?,?,?,?)",
                 (last_row_id, '01.09.2020', '01.09.2020', '01.09.2020'))
             self.conn.commit()
             self.conn.close()

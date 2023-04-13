@@ -7,7 +7,9 @@ import sqlite3
 class EdtComp(QMainWindow, EdtWindow):
     closed = pyqtSignal()
 
-    def __init__(self, row):
+    def __init__(self, row, widget_table, table):
+        self.widget_table = widget_table
+        self.table = table
         super().__init__()
         self.row = row
         self.setupUi(self)
@@ -40,7 +42,7 @@ class EdtComp(QMainWindow, EdtWindow):
         cur = conn.cursor()
         # Обновляем запись в базе данных
         cur.execute(
-            "UPDATE computers SET type=?, name=?, location=?, worker=?, inventory=?, ip=?, warranty=? WHERE id=?",
+            f"UPDATE {self.table} SET type=?, name=?, location=?, worker=?, inventory=?, ip=?, warranty=? WHERE id=?",
             (edited_row))
         conn.commit()
         conn.close()

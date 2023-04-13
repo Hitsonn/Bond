@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>566</width>
-    <height>584</height>
+    <width>839</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -140,33 +140,13 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QTreeWidget" name="treeWidget">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+         <widget class="QTreeView" name="treeView_2">
           <property name="maximumSize">
            <size>
             <width>180</width>
             <height>16777215</height>
            </size>
           </property>
-          <property name="expandsOnDoubleClick">
-           <bool>true</bool>
-          </property>
-          <property name="columnCount">
-           <number>1</number>
-          </property>
-          <attribute name="headerVisible">
-           <bool>false</bool>
-          </attribute>
-          <column>
-           <property name="text">
-            <string notr="true">1</string>
-           </property>
-          </column>
          </widget>
         </item>
         <item>
@@ -204,10 +184,10 @@
            </layout>
           </item>
           <item>
-           <widget class="QTextEdit" name="textEdit_2"/>
+           <widget class="QTableWidget" name="tableWidget_2"/>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_3"/>
+           <widget class="QTextEdit" name="textEdit_2"/>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -230,7 +210,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QTreeView" name="treeView_2">
+         <widget class="QTreeView" name="treeView_3">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -280,7 +260,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_5"/>
+           <widget class="QTableWidget" name="tableWidget_3"/>
           </item>
           <item>
            <widget class="QTextEdit" name="textEdit_3"/>
@@ -309,7 +289,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>566</width>
+     <width>839</width>
      <height>21</height>
     </rect>
    </property>
