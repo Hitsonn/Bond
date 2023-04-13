@@ -65,6 +65,7 @@ class MyWidget(QMainWindow, Ui_mainWindow):
             lambda: self.add_duplicate('other', 'service3', self.tableWidget_3, self.treeView_3))
         self.action_3.triggered.connect(self.setting)
         self.action_2.triggered.connect(self.worker_report)
+        self.action.triggered.connect(self.close)
 
     def update_table_computers(self, widget_table, widget_view, table):
         # Обновление таблиц с оборудованием
