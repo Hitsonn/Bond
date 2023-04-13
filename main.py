@@ -1,26 +1,27 @@
-import sys
 import datetime
+import json
+import sys
 
-from PyQt5 import uic, QtWidgets
+from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QWidget, QMessageBox
-import sqlite3
-from forms.general import Gen_window
-from forms.add_computer import *
-from forms.edt_computer import *
-from data.config import service1, service2, service3
+from PyQt5.QtWidgets import QTableWidgetItem, QApplication
+from forms.general import Ui_mainWindow
+from windows.add_computer import *
+from windows.edt_computer import *
+from windows.setting_window import *
 
 
-# from Ui import Ui_MainWindow
-
-
-class MyWidget(QMainWindow, Gen_window):
+class MyWidget(QMainWindow, Ui_mainWindow):
     def __init__(self):
         super().__init__()
+        with open("data\set.json", "r") as f:
+            settings = json.load(f)
+        self.service1 = settings["service1"]
+        self.service2 = settings["service2"]
+        self.service3 = settings["service3"]
         self.setupUi(self)
         self.update_table_computers()
         self.tableWidget_1.itemSelectionChanged.connect(self.update_textedit)
-        # self.tableWidget_1.itemChanged.connect(self.item_changed)
         self.add_btn.clicked.connect(self.show_add_form)
         self.del_btn.clicked.connect(self.delete_row)
         self.edt_btn.clicked.connect(self.edit_row)
@@ -30,17 +31,16 @@ class MyWidget(QMainWindow, Gen_window):
         self.serv3_btn.clicked.connect(lambda: self.update_service(3))
         self.current_computer_id = None
         self.dubll_btn.clicked.connect(self.add_duplicate)
-        # self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
+        self.action_3.triggered.connect(self.setting)
 
     def update_table_computers(self):
         con = sqlite3.connect("db/computers.sqlite3")
         cur = con.cursor()
         result = cur.execute("""SELECT * FROM computers""").fetchall()
-        self.tableWidget_1.setColumnCount(10)
+        self.tableWidget_1.setColumnCount(8)
         self.tableWidget_1.setRowCount(0)
         self.tableWidget_1.setHorizontalHeaderLabels(
-            ['id', 'тип', 'имя', 'кабинет', 'работник', 'инв_№', 'ip', 'гарантия', 'дата бслуживания',
-             'след обслуживание'])
+            ['id', 'наименование', 'сетевое имя', 'кабинет', 'работник', 'инв_№', 'ip', 'гарантия'])
         for i, row in enumerate(result):
             self.tableWidget_1.setRowCount(
                 self.tableWidget_1.rowCount() + 1)
@@ -64,12 +64,6 @@ class MyWidget(QMainWindow, Gen_window):
         self.treeView.selectionModel().selectionChanged.connect(self.filter_data)
         con.close()
 
-    # def item_changed(self, item):
-    #     print(item.column())
-        # print(item.text())
-        # print(item.row())
-        # self.tableWidget_1.modified[self.titles[item.column()]] = item.text()
-
     def filter_data(self):
         if not (selected_indexes := self.treeView.selectedIndexes()):
             return
@@ -85,14 +79,12 @@ class MyWidget(QMainWindow, Gen_window):
         self.tableWidget_1.setColumnCount(len(results[0]))
         self.tableWidget_1.setHorizontalHeaderLabels([description[0] for description in cursor.description])
         self.tableWidget_1.setHorizontalHeaderLabels(
-            ['id', 'тип', 'имя', 'кабинет', 'работник', 'инв_№', 'ip', 'гарантия', 'дата бслуживания',
-             'след обслуживание'])
+            ['id', 'наименование', 'сетевое имя', 'кабинет', 'работник', 'инв_№', 'ip', 'гарантия'])
         for i, row in enumerate(results):
             for j, value in enumerate(row):
                 item = QTableWidgetItem(str(value))
                 self.tableWidget_1.setItem(i, j, item)
         db.close()
-
 
     def show_add_form(self):
         self.ex1 = AddComp()
@@ -180,21 +172,20 @@ class MyWidget(QMainWindow, Gen_window):
         if result:
             self.textEdit.clear()
             self.textEdit.append(f"Данные для {name}:\n")
-            if self.check_date(result[0][1]) > service1:
+            if self.check_date(result[0][1]) > self.service1:
                 self.textEdit.append(f'Дата ТО_1: <font color="red">{result[0][1]}</font>')
             else:
                 self.textEdit.append(f'Дата ТО_1: {result[0][1]}')
-            if self.check_date(result[0][2]) > service2:
+            if self.check_date(result[0][2]) > self.service2:
                 self.textEdit.append(f'Дата ТО_2: <font color="red">{result[0][2]}</font>')
             else:
                 self.textEdit.append(f'Дата ТО_2: {result[0][2]}')
-            if self.check_date(result[0][3]) > service3:
+            if self.check_date(result[0][3]) > self.service3:
                 self.textEdit.append(f'Дата ТО_3: <font color="red">{result[0][3]}</font>')
             else:
                 self.textEdit.append(f'Дата ТО_3: {result[0][3]}')
         else:
             self.textEdit.setText(f"Для отображения выделите объект")
-
 
     def update_service(self, service_number):
         service_column = f'service{service_number}'
@@ -207,6 +198,11 @@ class MyWidget(QMainWindow, Gen_window):
         con.commit()
         con.close()
         self.update_textedit()
+
+    def setting(self):
+        self.ex4 = SettingWindow()
+        self.ex4.closed.connect(self.update_table_computers)
+        self.ex4.show()
 
 
 def except_hook(cls, exception, traceback):
