@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>345</height>
+    <width>480</width>
+    <height>249</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,12 +48,6 @@
         </item>
         <item>
          <widget class="QLineEdit" name="warranty_edt"/>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="servece_edt"/>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="next_edt"/>
         </item>
        </layout>
       </item>

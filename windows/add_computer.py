@@ -1,7 +1,5 @@
-import sys
-
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
-from forms.Add_window import AddWindow
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from forms.Ui_add import AddWindow
 import sqlite3
 from PyQt5.QtCore import pyqtSignal
 
@@ -27,8 +25,6 @@ class AddComp(QMainWindow, AddWindow):
             self.inventory_edt.setText(result[5])
             self.ip_edt.setText(result[6])
             self.warranty_edt.setText(result[7])
-            self.servece_edt.setText(result[8])
-            self.next_edt.setText(result[9])
 
     def add(self):
         typ = self.type_edt.text()
@@ -38,12 +34,10 @@ class AddComp(QMainWindow, AddWindow):
         inventory = self.inventory_edt.text()
         ip = self.ip_edt.text()
         warranty = self.warranty_edt.text()
-        service = self.servece_edt.text()
-        nex = self.next_edt.text()
-        if all([typ, name, location, worker, inventory, ip, warranty, service, nex]):
+        if all([typ, name, location, worker, inventory, ip, warranty]):
             self.cur.execute(
-                "INSERT INTO computers (type, name, location, worker, inventory, ip, warranty, service, next_service)"
-                " VALUES (?,?,?,?,?,?,?,?,?)", (typ, name, location, worker, inventory, ip, warranty, service, nex))
+                "INSERT INTO computers (type, name, location, worker, inventory, ip, warranty)"
+                " VALUES (?,?,?,?,?,?,?)", (typ, name, location, worker, inventory, ip, warranty))
             last_row_id = self.cur.lastrowid
             self.cur.execute(
                 "INSERT INTO service (id, service1, service2, service3) VALUES (?,?,?,?)",

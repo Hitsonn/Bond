@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Ui_edt.ui'
+# Form implementation generated from reading ui file 'Ui_add.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -11,10 +11,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class EdtWindow(object):
+class AddWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(766, 345)
+        MainWindow.resize(480, 249)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -47,12 +47,6 @@ class EdtWindow(object):
         self.warranty_edt = QtWidgets.QLineEdit(self.centralwidget)
         self.warranty_edt.setObjectName("warranty_edt")
         self.verticalLayout.addWidget(self.warranty_edt)
-        self.servece_edt = QtWidgets.QLineEdit(self.centralwidget)
-        self.servece_edt.setObjectName("servece_edt")
-        self.verticalLayout.addWidget(self.servece_edt)
-        self.next_edt = QtWidgets.QLineEdit(self.centralwidget)
-        self.next_edt.setObjectName("next_edt")
-        self.verticalLayout.addWidget(self.next_edt)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setContentsMargins(-1, 0, -1, 0)
@@ -156,7 +150,7 @@ class EdtWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Редактирование"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Добавить"))
         self.label.setText(_translate("MainWindow", "Тип"))
         self.label_7.setText(_translate("MainWindow", "Имя"))
         self.label_6.setText(_translate("MainWindow", "Расположение"))
@@ -166,5 +160,5 @@ class EdtWindow(object):
         self.label_8.setText(_translate("MainWindow", "Гарантия"))
         self.label_5.setText(_translate("MainWindow", "Дата обслуживания"))
         self.label_9.setText(_translate("MainWindow", "След. обслуживание"))
-        self.pushButton.setText(_translate("MainWindow", "Сохранить"))
+        self.pushButton.setText(_translate("MainWindow", "Добавить"))
         self.pushButton_2.setText(_translate("MainWindow", "Отмена"))
