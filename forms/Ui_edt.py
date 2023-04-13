@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Ui_edt.ui'
+# Form implementation generated from reading ui file 'ui_edt.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -110,22 +110,6 @@ class EdtWindow(object):
         self.label_8.setSizePolicy(sizePolicy)
         self.label_8.setObjectName("label_8")
         self.verticalLayout_2.addWidget(self.label_8)
-        self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-        self.label_5.setSizePolicy(sizePolicy)
-        self.label_5.setObjectName("label_5")
-        self.verticalLayout_2.addWidget(self.label_5)
-        self.label_9 = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
-        self.label_9.setSizePolicy(sizePolicy)
-        self.label_9.setObjectName("label_9")
-        self.verticalLayout_2.addWidget(self.label_9)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
         self.verticalLayout_3.addLayout(self.horizontalLayout_2)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -151,14 +135,12 @@ class EdtWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Редактирование"))
-        self.label.setText(_translate("MainWindow", "Тип"))
-        self.label_7.setText(_translate("MainWindow", "Имя"))
+        self.label.setText(_translate("MainWindow", "Наименивание"))
+        self.label_7.setText(_translate("MainWindow", "Сетевое имя"))
         self.label_6.setText(_translate("MainWindow", "Расположение"))
         self.label_3.setText(_translate("MainWindow", "Работник"))
         self.label_2.setText(_translate("MainWindow", "Инв. номер"))
         self.label_4.setText(_translate("MainWindow", "ip"))
         self.label_8.setText(_translate("MainWindow", "Гарантия"))
-        self.label_5.setText(_translate("MainWindow", "Дата обслуживания"))
-        self.label_9.setText(_translate("MainWindow", "След. обслуживание"))
         self.pushButton.setText(_translate("MainWindow", "Сохранить"))
         self.pushButton_2.setText(_translate("MainWindow", "Отмена"))

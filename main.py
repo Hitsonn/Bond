@@ -4,8 +4,8 @@ import sys
 
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtWidgets import QTableWidgetItem, QApplication
-from forms.general import Ui_mainWindow
+from PyQt5.QtWidgets import QTableWidgetItem, QApplication, QHeaderView
+from forms.ui import Ui_mainWindow
 from windows.add_computer import *
 from windows.edt_computer import *
 from windows.setting_window import *
@@ -20,6 +20,7 @@ class MyWidget(QMainWindow, Ui_mainWindow):
         self.service2 = settings["service2"]
         self.service3 = settings["service3"]
         self.setupUi(self)
+
         self.update_table_computers(self.tableWidget_1, self.treeView, 'computers')
         self.update_table_computers(self.tableWidget_2, self.treeView_2, 'office_equipment')
         self.update_table_computers(self.tableWidget_3, self.treeView_3, 'other')
@@ -75,6 +76,8 @@ class MyWidget(QMainWindow, Ui_mainWindow):
                 widget_table.setItem(
                     i, j, QTableWidgetItem(str(elem)))
         widget_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        widget_table.setColumnHidden(0, 1)
+        widget_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
         results = cur.execute(f"SELECT DISTINCT location FROM {table}").fetchall()
         model = QStandardItemModel()
         all_item = QStandardItem("все")
@@ -204,7 +207,8 @@ class MyWidget(QMainWindow, Ui_mainWindow):
         if widget_table.item(selected_row, 0):
             id = widget_table.item(selected_row, 0).text()
             self.current_computer_id = id
-            name = widget_table.item(selected_row, 2).text()
+            name = widget_table.item(selected_row, 1).text()
+            network_name = widget_table.item(selected_row, 2).text()
             self.conn = sqlite3.connect('db/computers.sqlite3')
             cur = self.conn.cursor()
             result = cur.execute(f"""SELECT * FROM {table} WHERE id={id}""").fetchall()
@@ -213,7 +217,7 @@ class MyWidget(QMainWindow, Ui_mainWindow):
         # Если данные найдены, заполняем текстовое поле
         if result:
             widget_edit.clear()
-            widget_edit.append(f"Данные для {name}:\n")
+            widget_edit.append(f"Данные для {name}, сетевое имя {network_name}:\n")
             if self.check_date(result[0][1]) > self.service1:
                 widget_edit.append(f'Дата ТО_1: <font color="red">{result[0][1]}</font>')
             else:

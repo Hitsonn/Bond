@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>839</width>
-    <height>628</height>
+    <width>878</width>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,10 +100,24 @@
            </layout>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_1"/>
+           <widget class="QTableWidget" name="tableWidget_1">
+            <property name="sizeAdjustPolicy">
+             <enum>QAbstractScrollArea::AdjustIgnored</enum>
+            </property>
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+           </widget>
           </item>
           <item>
-           <widget class="QTextEdit" name="textEdit"/>
+           <widget class="QTextEdit" name="textEdit">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -150,7 +164,10 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
+         <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,1,0,0">
+          <property name="spacing">
+           <number>1</number>
+          </property>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
@@ -184,10 +201,21 @@
            </layout>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_2"/>
+           <widget class="QTableWidget" name="tableWidget_2">
+            <property name="sizeAdjustPolicy">
+             <enum>QAbstractScrollArea::AdjustIgnored</enum>
+            </property>
+           </widget>
           </item>
           <item>
-           <widget class="QTextEdit" name="textEdit_2"/>
+           <widget class="QTextEdit" name="textEdit_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -226,7 +254,10 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_7">
+         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,1,0,0">
+          <property name="spacing">
+           <number>1</number>
+          </property>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
@@ -260,10 +291,24 @@
            </layout>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_3"/>
+           <widget class="QTableWidget" name="tableWidget_3">
+            <property name="sizeAdjustPolicy">
+             <enum>QAbstractScrollArea::AdjustIgnored</enum>
+            </property>
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+           </widget>
           </item>
           <item>
-           <widget class="QTextEdit" name="textEdit_3"/>
+           <widget class="QTextEdit" name="textEdit_3">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout">
@@ -289,7 +334,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>839</width>
+     <width>878</width>
      <height>21</height>
     </rect>
    </property>
