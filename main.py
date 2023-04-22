@@ -4,7 +4,7 @@ import os
 import shutil
 import sys
 
-import xlsxwriter as xlsxwriter
+import xlsxwriter
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QTableWidgetItem, QApplication, QHeaderView, QInputDialog, QFileDialog
@@ -65,6 +65,10 @@ class MyWidget(QMainWindow, Ui_mainWindow):
             lambda: self.add_duplicate('other', 'service3', self.tableWidget_3, self.treeView_3))
         self.action_3.triggered.connect(self.setting)
         self.action_2.triggered.connect(self.worker_report)
+        self.searchEdit.textChanged.connect(lambda: self.search(self.searchEdit, self.tableWidget_1, 'computers'))
+        self.searchEdit_2.textChanged.connect(lambda: self.search(self.searchEdit_2, self.tableWidget_2, 'office_equipment'))
+        self.searchEdit_3.textChanged.connect(lambda: self.search(self.searchEdit_3, self.tableWidget_3, 'other'))
+
         self.action.triggered.connect(self.close)
 
     def update_table_computers(self, widget_table, widget_view, table):
@@ -101,6 +105,23 @@ class MyWidget(QMainWindow, Ui_mainWindow):
         widget_view.selectionModel().selectionChanged.connect(
             lambda: self.filter_data(widget_table, widget_view, table))
         con.close()
+
+    def search(self, searchEdit, tableWidget, table):
+        search_text = searchEdit.text()
+        db = sqlite3.connect('db/computers.sqlite3')
+        cursor = db.cursor()
+        cursor.execute(
+            f"SELECT * FROM {table} WHERE type LIKE '%{search_text}%' OR name LIKE '%{search_text}%'"
+            f"OR location LIKE '%{search_text}%' OR worker LIKE '%{search_text}%' OR inventory LIKE '%{search_text}%'"
+            f"OR ip LIKE '%{search_text}%' OR warranty LIKE '%{search_text}%'")
+        rows = cursor.fetchall()
+        tableWidget.setRowCount(0)
+        for row_num, row_data in enumerate(rows):
+            tableWidget.insertRow(row_num)
+            for col_num, col_data in enumerate(row_data):
+                item = QtWidgets.QTableWidgetItem(str(col_data))
+                tableWidget.setItem(row_num, col_num, item)
+        db.close()
 
     def filter_data(self, widget_table, widget_view, table):
         # фильтрация по локации
